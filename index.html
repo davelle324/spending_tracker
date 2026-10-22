@@ -845,7 +845,7 @@ function loadFromCloud(db){
 function authSendCode(){
   var email=(document.getElementById("acct-email")||{}).value||"";
   if(!email||!email.includes("@")){state.authError="Enter a valid email address.";render();return;}
-  state.authStep="sending";state.authError=null;render();
+  state.authStep="sending";state.authEmail=email;state.authError=null;render();
   fetch("/api/auth/send-code",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email})})
     .then(function(r){return r.json();})
     .then(function(j){
@@ -855,7 +855,7 @@ function authSendCode(){
     }).catch(function(){state.authStep="idle";state.authError="Network error — try again.";render();});
 }
 function authVerifyCode(){
-  var email=(document.getElementById("acct-email")||{}).value||"";
+  var email=state.authEmail||"";
   var code=(document.getElementById("acct-code")||{}).value||"";
   if(!code){state.authError="Enter the 6-digit code from your email.";render();return;}
   state.authStep="verifying";state.authError=null;render();
@@ -877,7 +877,7 @@ function authSignOut(){
   if(state.account){
     fetch("/api/auth/sign-out",{method:"POST",headers:authHeaders()}).catch(function(){});
   }
-  saveAccount(null);state.authStep="idle";state.authError=null;render();toast("Signed out");
+  saveAccount(null);state.authStep="idle";state.authError=null;state.authEmail=null;render();toast("Signed out");
 }
 /* ---------- Google Sign-In ---------- */
 var _googleClientId=null;
@@ -978,7 +978,7 @@ document.addEventListener("click",function(ev){
   else if(a==="auth-send"){authSendCode();}
   else if(a==="auth-verify"){authVerifyCode();}
   else if(a==="auth-sign-out"){authSignOut();}
-  else if(a==="auth-reset"){state.authStep="idle";state.authError=null;render();}
+  else if(a==="auth-reset"){state.authStep="idle";state.authError=null;state.authEmail=null;render();}
   else if(a==="reset-start"){state.pendingReset=true;render();}
   else if(a==="reset-cancel"){state.pendingReset=false;render();}
   else if(a==="reset-confirm"){resetAllData();}
