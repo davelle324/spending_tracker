@@ -838,7 +838,9 @@ function loadFromCloud(db){
     if(!remote||!remote.exists)return;
     var local=db.exportAll();
     var localKeys=Object.keys(local.entries||{}).length,remoteKeys=Object.keys(remote.entries||{}).length;
-    if(remoteKeys>localKeys)db.importAll({entries:remote.entries||{},settings:remote.settings||null});
+    var localHasData=localKeys>0||!!(local.settings&&Object.keys(local.settings).length);
+    var remoteHasData=remoteKeys>0||!!(remote.settings&&Object.keys(remote.settings).length);
+    if(remoteKeys>localKeys||(remoteHasData&&!localHasData))db.importAll({entries:remote.entries||{},settings:remote.settings||null});
   }).catch(function(){});
 }
 /* ---------- auth actions ---------- */
@@ -865,7 +867,7 @@ function authVerifyCode(){
       if(j.ok){
         saveAccount({email:j.email,token:j.token});
         state.authStep="idle";state.authError=null;
-        // pull account data and merge with local
+        syncToCloud(state.db.exportAll());// push existing local data up immediately
         loadFromCloud(state.db);
         render();toast("Signed in as "+j.email);
       } else {
