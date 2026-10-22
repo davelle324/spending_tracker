@@ -1,0 +1,17 @@
+{
+  "name": "spending-tracker",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo 'Static site + Vercel Functions — no compile step needed'",
+    "db:init": "node scripts/db-init.js"
+  },
+  "dependencies": {
+    "@neon/config": "^1.9.3",
+    "@neon/env": "^1.6.4",
+    "@neondatabase/serverless": "^0.10.4",
+    "dotenv": "^18.0.8",
+    "resend": "^4.6.0",
+    "google-auth-library": "^9.15.1"
+  }
+}

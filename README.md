@@ -12,6 +12,27 @@ Everything is saved on the phone itself. Nothing is sent anywhere.
 | `sw.js` | Lets the app open with no internet |
 | `icons/` | App icons (`icon-1024.png` is for the App Store later) |
 | `vercel.json` | Tells Vercel to always serve the newest version |
+| `neon.ts` | Neon project config (branch policy) |
+| `api/sync.js` | Vercel serverless function — syncs app data to Neon Postgres |
+| `scripts/db-init.js` | One-time schema setup: `npm run db:init` |
+| `.env.local` | Local env vars from `neon deploy` (not committed) |
+
+## Run locally
+
+No build step — it's a static site. You do need a local server (the service worker won't work over `file://`).
+
+**Python (comes with macOS/Linux/WSL):**
+```bash
+python3 -m http.server 8080
+```
+Then open [http://localhost:8080](http://localhost:8080).
+
+**Node:**
+```bash
+npx serve .
+```
+
+---
 
 ## 1. Put it on Vercel (free Hobby plan)
 
@@ -41,12 +62,19 @@ Your data lives in that home-screen app. If you also open the link in Safari, th
 ## 3. Bring over what you entered in the Claude version (optional)
 
 1. Save `spending-tracker-backup-from-claude.json` (sent separately, so it never gets uploaded to Vercel where anyone with the link could open it) to your iPhone (AirDrop, email it to yourself, or iCloud Drive → Files).
-2. In the app, go to **Budget → Backup → Restore** and pick the file.
+2. In the app, go to **Account → Restore** (the cloud button at the top of Home) and pick the file.
+
+## On a computer
+
+Open your Vercel link in Chrome or Edge. Wider than a tablet, the app switches to the desktop layout: a sidebar, a two-column Home and Budget, and entries open in a side panel.
+Press **N** to add an entry, **Esc** to close the panel.
+To install it like a desktop app: click the install icon at the right end of the address bar (or **⋮ → Install Spending Tracker**).
+The computer keeps its own copy of your data. Move data between devices with **Account → Save backup / Restore** until cloud sync is added.
 
 ## Backups
 
 Your budget is only on this phone, so if you delete the app or lose the phone, it's gone.
-Use **Budget → Backup → Save backup** every so often and save the file to **Files → iCloud Drive**.
+Use **Account → Save backup** every so often and save the file to **Files → iCloud Drive**.
 Restore puts it back on any phone.
 
 ## Updating the app
@@ -63,4 +91,4 @@ The plan, with no Mac needed:
 4. Install it on your phone with **TestFlight** first, then submit for App Store review when you're happy with it.
 5. Screen and feature changes can be pushed with an over-the-air update tool. Native changes (icon, Face ID, notifications) need a new build and review.
 
-Moving from the home-screen app to the App Store app: Save backup → Restore in the new app.
+Moving from the home-screen app to the App Store app: Account → Save backup, then Restore in the new app.

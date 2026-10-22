@@ -197,6 +197,45 @@ nav.tabs .add{width:56px;height:56px;margin-top:-18px;border:0;border-radius:999
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(88px + env(safe-area-inset-bottom,0px));z-index:60;background:var(--inv);color:var(--inv-fg);padding:10px 16px;border-radius:12px;font-size:13px;font-weight:700;max-width:calc(100% - 32px)}
 .notice{background:var(--p-bg);color:var(--p-title);border-radius:14px;padding:12px 14px;font-size:13px;font-weight:600;line-height:1.4}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
+.side{display:none}
+.side .logo{display:flex;align-items:center;gap:10px;padding:0 8px;font-size:18px;font-weight:800}
+.side .mark{width:32px;height:32px;border-radius:10px;background:#0F1B2D;display:flex;align-items:center;justify-content:center}
+.side .mark i{width:20px;height:20px;border-radius:999px;background:var(--accent);display:flex;align-items:center;justify-content:center}
+.side .nav{display:flex;flex-direction:column;gap:4px}
+.side .nav button{min-height:44px;padding:0 12px;border:0;border-radius:12px;background:transparent;display:flex;align-items:center;gap:12px;font-size:15px;font-weight:600;color:var(--seg-off);text-align:left}
+.side .nav button[aria-current="page"]{background:var(--tile);color:var(--ink);font-weight:800}
+.side .nav .count{margin-left:auto;font-size:12px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--p-bg);color:var(--p-fg)}
+.side .add-btn{min-height:44px;border:0;border-radius:12px;background:var(--accent);color:var(--accent-ink);display:flex;align-items:center;justify-content:center;gap:8px;font-size:15px;font-weight:800}
+.side .acct{border-radius:14px;border:1px solid var(--line);background:transparent;padding:12px;display:flex;flex-direction:column;gap:4px;text-align:left;color:var(--ink)}
+.side .acct[aria-current="page"]{border:2px solid var(--accent);padding:11px}
+.side .acct b{display:flex;align-items:center;gap:8px;font-size:13px}
+.side .acct span{font-size:12px;color:var(--muted)}
+.soon{font-size:11px;font-weight:800;padding:2px 8px;border-radius:999px;background:var(--tile);color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.field-in{min-height:50px;border-radius:12px;border:1px solid var(--chip-line);background:var(--bg);padding:0 14px;font-size:16px;font-weight:700;color:var(--ink);width:100%;box-sizing:border-box}
+.field-in:disabled,button:disabled{opacity:.55;cursor:not-allowed}
+.home-grid,.budget-grid{display:flex;flex-direction:column;gap:18px}
+@media (min-width: 960px){
+  nav.tabs{display:none}
+  .side{display:flex;position:fixed;top:0;bottom:0;left:0;width:232px;box-sizing:border-box;flex-direction:column;gap:22px;
+    padding:calc(24px + env(safe-area-inset-top,0px)) 16px calc(24px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));
+    background:var(--card);border-right:1px solid var(--line);z-index:25}
+  .app{max-width:1180px;margin:0 0 0 232px;padding-left:40px;padding-right:40px;padding-block:32px 48px;gap:22px}
+  h1{font-size:30px}
+  .home-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"top top" "hero month" "recent up";gap:22px;align-items:start}
+  .g-top{grid-area:top}.g-hero{grid-area:hero}.g-month{grid-area:month;align-self:stretch;justify-content:center}.g-up{grid-area:up}.g-recent{grid-area:recent}
+  .home-grid .notice{grid-column:1/-1}
+  .budget-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"top top" "plan plan" "income cats" "sched cats" "backup cats";gap:22px;align-items:start}
+  .b-top{grid-area:top}.b-plan{grid-area:plan}.b-income{grid-area:income}.b-cats{grid-area:cats}.b-sched{grid-area:sched}.b-backup{grid-area:backup}
+  .acct-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:22px;align-items:start}
+  /* the add / edit form opens as a side panel instead of covering the screen */
+  .sheet{left:auto;width:440px;border-left:1px solid var(--line);box-shadow:-16px 0 40px rgba(0,0,0,0.12)}
+  .toast{left:calc(50% + 116px);bottom:32px}
+  .item.swipe .slide{cursor:default}
+}
+.acct-grid{display:flex;flex-direction:column;gap:18px}
+.item.swipe:not(.reveal) .del{visibility:hidden}
+@media (min-width: 960px){.app>.seg{max-width:520px}}
+@media (min-width: 960px){.acct-grid{display:grid}}
 .backup-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
 </style>
 </head>
@@ -205,6 +244,18 @@ nav.tabs .add{width:56px;height:56px;margin-top:-18px;border:0;border-radius:999
 <div class="app" id="app">
   <div class="empty"><b>Loading your budget…</b><p>Your balance, bills and entries will show up here.</p></div>
 </div>
+
+<aside class="side" aria-label="Main">
+  <div class="logo"><span class="mark" aria-hidden="true"><i><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></i></span>Spending</div>
+  <div class="nav">
+    <button data-tab="home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
+    <button data-tab="activity"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Activity<span class="count" id="side-count" hidden></span></button>
+    <button data-tab="budget"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Budget</button>
+  </div>
+  <button class="add-btn" data-action="new" title="Add entry (N)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add entry</button>
+  <div style="flex-grow:1"></div>
+  <button class="acct" data-tab="account"><b><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>Settings</b><span>Backup, sync &amp; reset</span></button>
+</aside>
 
 <nav class="tabs" aria-label="Main">
   <div class="in">
@@ -229,7 +280,8 @@ function cleanDays(days){return (Array.isArray(days)?days:[]).map(Number).filter
 function repLabel(e){if(e.repeat==="days"){var d=cleanDays(e.days);return d.length?"Monthly on the "+d.map(ordinal).join(", "):"";}return REPEAT_LABEL[e.repeat]||"";}
 var now=new Date();
 var state={db:null,dbFailed:false,entries:[],entriesLoaded:false,settings:{},settingsLoaded:false,view:"home",filter:"all",
-  month:{y:now.getFullYear(),m:now.getMonth()},editBalance:false,editLimit:null,sheet:null};
+  month:{y:now.getFullYear(),m:now.getMonth()},editBalance:false,editLimit:null,sheet:null,
+  account:null,authStep:"idle",authError:null,pendingReset:false};
 
 /* ---------- helpers ---------- */
 function esc(s){return String(s==null?"":s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
@@ -369,6 +421,15 @@ function toggleCleared(id){
   toast(c?"Marked cleared":"Marked pending");
 }
 
+/* ---------- desktop ---------- */
+var wideMQ=window.matchMedia("(min-width: 960px)");
+try{wideMQ.addEventListener("change",function(){render();});}catch(e){}
+document.addEventListener("keydown",function(ev){
+  var tag=(ev.target&&ev.target.tagName)||"";
+  if(ev.metaKey||ev.ctrlKey||ev.altKey||/INPUT|TEXTAREA|SELECT/.test(tag)||state.sheet)return;
+  if(ev.key==="n"||ev.key==="N"){ev.preventDefault();openSheet(null,"expense");}
+});
+
 /* ---------- views ---------- */
 function rowHtml(e,withCheck){
   var t=today(),isIn=e.type==="income";
@@ -392,9 +453,9 @@ function rowHtml(e,withCheck){
 function renderHome(){
   var s=state.settings,b=balanceInfo(),t=today(),hasAnchor=typeof s.anchor==="number";
   var ms=monthSummary(now.getFullYear(),now.getMonth());
-  var h='<div class="top"><div><h1>Spending</h1><div class="sub">'+esc(parse(t).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"}))+'</div></div>'+themeButton()+'</div>';
+  var h='<div class="top g-top"><div><h1>'+(state.wide?'Home':'Spending')+'</h1><div class="sub">'+esc(parse(t).toLocaleDateString("en-US",{weekday:"long",month:"long",day:"numeric"}))+'</div></div><div style="display:flex;gap:8px">'+acctButton()+themeButton()+'</div></div>';
   if(!hasAnchor||state.editBalance){
-    h+='<section class="hero"><div><div class="lbl">'+(hasAnchor?'Update bank balance':'Start here')+'</div><div style="font-size:20px;font-weight:800;margin-top:4px">What does your bank account show right now?</div></div>'+
+    h+='<section class="hero g-hero"><div><div class="lbl">'+(hasAnchor?'Update bank balance':'Start here')+'</div><div style="font-size:20px;font-weight:800;margin-top:4px">What does your bank account show right now?</div></div>'+
       '<form id="anchor-form" style="display:flex;flex-direction:column;gap:10px"><label class="lbl" for="anchor-in">Current balance</label><input id="anchor-in" inputmode="decimal" autocomplete="off" placeholder="$0.00" value="'+esc(state.adjValue!=null?state.adjValue:(hasAnchor?(b.bal/100).toFixed(2):""))+'">'+
       (hasAnchor?'<div class="lbl">Why is it different?</div><div class="chips" role="group" aria-label="Reason">'+["Correction","Bank fee","Interest","Transfer","Refund"].map(function(r){return '<button type="button" class="chip adj" data-action="adjreason" data-v="'+r+'" aria-pressed="'+((state.adjReason||"Correction")===r)+'">'+r+'</button>';}).join("")+'</div>'+
         '<p class="note" style="margin:0">The app is at '+balText(b.bal)+'. The difference is saved as a cleared adjustment in Activity, so your history and balances stay right. Adjustments don\'t count toward your budget.</p>'
@@ -402,18 +463,18 @@ function renderHome(){
       '<button class="go" type="submit">'+(hasAnchor?'Save adjustment':'Save balance')+'</button>'+
       (hasAnchor?'<button class="hero-btn" type="button" data-action="cancel-balance">Cancel</button>':'')+'</form></section>';
   }else{
-    h+='<section class="hero"><div class="bal-row"><div><div class="lbl">Bank balance (cleared)</div><div class="big">'+(b.bal<0?"−":"")+fmt(b.bal)+'</div></div><button class="hero-btn" data-action="edit-balance">Update</button></div>'+
+    h+='<section class="hero g-hero"><div class="bal-row"><div><div class="lbl">Bank balance (cleared)</div><div class="big">'+(b.bal<0?"−":"")+fmt(b.bal)+'</div></div><button class="hero-btn" data-action="edit-balance">Update</button></div>'+
       '<div class="pair"><div class="tile"><div class="lbl" style="font-size:12px">Pending</div><div class="v" style="color:var(--hero-pend)">'+net(b.pend)+'</div></div>'+
       '<div class="tile"><div class="lbl" style="font-size:12px">Available</div><div class="v" style="color:var(--hero-avail)">'+(b.avail<0?"−":"")+fmt(b.avail)+'</div></div></div>'+
       '<div class="note">Available is what your bank should show once '+(b.count===0?'everything clears. Nothing is pending right now.':b.count+' pending item'+(b.count===1?'':'s')+' clear'+(b.count===1?'s':'')+'.')+
       (s.anchorAt?' Balance last updated '+esc(new Date(s.anchorAt).toLocaleDateString("en-US",{month:"short",day:"numeric"}))+'.':'')+'</div></section>';
   }
   var pct=ms.income>0?Math.min(100,Math.round(ms.spent/ms.income*100)):0;
-  h+='<section class="card"><div class="row-head sub"><span>Spent '+fmt(ms.spent)+'</span><span>Income '+fmt(ms.income)+'</span></div><div class="bar" role="img" aria-label="'+pct+' percent of income used"><i style="width:'+pct+'%"></i></div>'+
+  h+='<section class="card g-month"><div class="row-head sub"><span>Spent '+fmt(ms.spent)+'</span><span>Income '+fmt(ms.income)+'</span></div><div class="bar" role="img" aria-label="'+pct+' percent of income used"><i style="width:'+pct+'%"></i></div>'+
     '<div class="sub" style="font-weight:500">'+(ms.income>0?pct+'% of '+MONTHS[now.getMonth()]+'\'s income used':'Add your paycheck as income to see how much of it you\'ve used.')+'</div></section>';
   var futureAll=live().filter(function(e){return e.date>t&&!e.cleared;}).sort(function(a,b){return a.date<b.date?-1:1;});
   var limit=addDays(t,WINDOW),up=futureAll.filter(function(e){return e.date<=limit;});
-  h+='<section style="display:flex;flex-direction:column;gap:8px"><div class="row-head"><div><h2>Coming up</h2><div class="small muted">Next '+WINDOW+' days</div></div><button class="link" data-action="see-upcoming">See all</button></div>';
+  h+='<section class="g-up" style="display:flex;flex-direction:column;gap:8px"><div class="row-head"><div><h2>Coming up</h2><div class="small muted">Next '+WINDOW+' days</div></div><button class="link" data-action="see-upcoming">See all</button></div>';
   if(up.length){
     var upTotal=up.reduce(function(s,e){return s+(e.type==="income"?e.amount:-e.amount);},0);
     h+='<div class="list">'+up.slice(0,6).map(function(e){var isIn=e.type==="income";
@@ -425,7 +486,7 @@ function renderHome(){
   else h+='<div class="empty"><b>Nothing scheduled</b><p>Add a bill or paycheck and set it to repeat. The next one shows up here.</p></div>';
   h+='</section>';
   var recent=live().filter(function(e){return e.date<=t;}).sort(function(a,b){return a.date===b.date?touched(b)-touched(a):(a.date<b.date?1:-1);}).slice(0,5);
-  h+='<section style="display:flex;flex-direction:column;gap:8px"><div class="row-head"><h2>Recent</h2><button class="link" data-tab="activity">See all</button></div>';
+  h+='<section class="g-recent" style="display:flex;flex-direction:column;gap:8px"><div class="row-head"><h2>Recent</h2><button class="link" data-tab="activity">See all</button></div>';
   if(recent.length)h+='<div class="list">'+recent.map(function(e){return rowHtml(e,false);}).join("")+'</div>';
   else h+='<div class="empty"><b>No entries yet</b><p>Tap the + button to add your first expense, or add your paycheck as income.</p></div>';
   h+='</section>';
@@ -439,12 +500,12 @@ function renderActivity(){
   var h='<div class="top"><h1>Activity</h1>'+themeButton()+'</div>';
   h+='<div class="seg" role="group" aria-label="Filter" style="grid-template-columns:repeat(3,minmax(0,1fr))">'+
     [["all","All"],["pending","Pending"+(pending.length?" ("+pending.length+")":"")],["cleared","Cleared"]].map(function(o){return '<button data-action="filter" data-v="'+o[0]+'" aria-pressed="'+(f===o[0])+'">'+o[1]+'</button>';}).join("")+'</div>';
-  if(pending.length&&f!=="cleared")h+='<div class="banner"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>'+(pendNet<=0?fmt(pendNet)+' still to come out':fmt(pendNet)+' still to come in')+'</b><span class="small">Tap a circle to mark an item cleared</span></div></div>';
+  if(pending.length&&f!=="cleared")h+='<div class="banner"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><b>'+(pendNet<=0?fmt(pendNet)+' still to come out':fmt(pendNet)+' still to come in')+'</b><span class="small">'+(state.wide?'Click':'Tap')+' a circle to mark an item cleared</span></div></div>';
   var list=all.filter(function(e){if(f==="pending")return !e.cleared&&e.date<=t;if(f==="cleared")return e.cleared;return true;});
   var upcoming=f==="all"?list.filter(function(e){return e.date>t;}).sort(function(a,b){return a.date<b.date?-1:1;}):[];
   var past=list.filter(function(e){return f!=="all"||e.date<=t;}).sort(function(a,b){return a.date===b.date?touched(b)-touched(a):(a.date<b.date?1:-1);});
   if(!list.length){h+='<div class="empty"><b>'+(f==="pending"?'Nothing pending':f==="cleared"?'Nothing cleared yet':'No entries yet')+'</b><p>'+(f==="all"?'Tap the + button to add an expense or income.':'Items show up here as you add them and mark them cleared.')+'</p></div>';return h;}
-  h+='<div class="small muted" style="margin-top:-6px;padding:0 4px">Swipe left on an entry to delete it.</div>';
+  h+='<div class="small muted" style="margin-top:-6px;padding:0 4px">'+(state.wide?'Click an entry to edit or delete it. Press N to add one.':'Swipe left on an entry to delete it.')+'</div>';
   var upHtml=upcoming.length?'<section><h2 class="group-h">Upcoming</h2><div class="list">'+upcoming.map(function(e){return rowHtml(e,true);}).join("")+'</div></section>':'';
   var groups=[],cur=null;
   past.forEach(function(e){if(!cur||cur.date!==e.date){cur={date:e.date,items:[]};groups.push(cur);}cur.items.push(e);});
@@ -457,16 +518,16 @@ function renderActivity(){
 
 function renderBudget(){
   var y=state.month.y,m=state.month.m,ms=monthSummary(y,m),budgets=state.settings.budgets||{};
-  var h='<div class="top"><div style="display:flex;align-items:center;gap:2px"><button class="icon-btn" style="background:transparent" data-action="month" data-d="-1" aria-label="Previous month"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>'+
+  var h='<div class="top b-top"><div style="display:flex;align-items:center;gap:2px"><button class="icon-btn" style="background:transparent" data-action="month" data-d="-1" aria-label="Previous month"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg></button>'+
     '<div><h1 style="font-size:22px">Budget</h1><div class="sub">'+MONTHS[m]+' '+y+'</div></div>'+
     '<button class="icon-btn" style="background:transparent" data-action="month" data-d="1" aria-label="Next month"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg></button></div>'+themeButton()+'</div>';
-  h+='<section class="card" style="padding-bottom:6px"><div class="row-head"><h2>Income</h2><button class="link" data-action="new-income">+ Add income</button></div>';
+  h+='<section class="card b-income" style="padding-bottom:6px"><div class="row-head"><h2>Income</h2><button class="link" data-action="new-income">+ Add income</button></div>';
   if(ms.incomes.length)h+=ms.incomes.map(function(e){return '<div class="srow"><span class="n">'+esc(e.name)+'</span><span class="w">'+esc(short(e.date))+'</span><span class="a in">+'+fmt(e.amount)+'</span></div>';}).join("");
   else h+='<p class="sub" style="margin:0 0 10px;font-weight:500">No income this month yet. Add your paycheck and set how often it comes.</p>';
   h+='</section>';
-  h+='<section class="plan"><div class="r"><span>Income</span><span>'+fmt(ms.income)+'</span></div><div class="r"><span>Spent so far</span><span>−'+fmt(ms.spent)+'</span></div><div class="r"><span>Still scheduled</span><span>−'+fmt(ms.sched)+'</span></div><hr>'+
+  h+='<section class="plan b-plan"><div class="r"><span>Income</span><span>'+fmt(ms.income)+'</span></div><div class="r"><span>Spent so far</span><span>−'+fmt(ms.spent)+'</span></div><div class="r"><span>Still scheduled</span><span>−'+fmt(ms.sched)+'</span></div><hr>'+
     '<div class="r" style="align-items:baseline"><span style="font-weight:600">Left to spend</span><span class="left'+(ms.left<0?' neg':'')+'">'+(ms.left<0?"−":"")+fmt(ms.left)+'</span></div></section>';
-  h+='<section class="card" style="gap:14px"><div class="row-head"><h2>By category</h2><span class="small muted">Tap a limit to change it</span></div>';
+  h+='<section class="card b-cats" style="gap:14px"><div class="row-head"><h2>By category</h2><span class="small muted">'+(state.wide?'Click':'Tap')+' a limit to change it</span></div>';
   var list=cats();Object.keys(ms.byCat).forEach(function(c){if(list.indexOf(c)<0)list.push(c);});
   list.forEach(function(c){
     var spent=ms.byCat[c]||0,lim=budgets[c]||0,pct=lim>0?Math.min(100,Math.round(spent/lim*100)):0,over=lim>0&&spent>=lim*0.9;
@@ -478,11 +539,63 @@ function renderBudget(){
     }
   });
   h+='</section>';
-  h+='<section class="card" style="padding-bottom:6px"><h2>Scheduled</h2>';
+  h+='<section class="card b-sched" style="padding-bottom:6px"><h2>Scheduled</h2>';
   if(ms.future.length)h+=ms.future.map(function(e){return '<div class="srow"><span class="n">'+esc(e.name)+'</span><span class="w">'+esc(short(e.date))+'</span><span class="a">'+fmt(e.amount)+'</span></div>';}).join("");
   else h+='<p class="sub" style="margin:0 0 10px;font-weight:500">No more bills scheduled this month.</p>';
   h+='</section>';
+  return h;
+}
+
+function acctButton(){
+  return '<button class="icon-btn" data-tab="account" aria-label="Account and backup"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17.5 19a4.5 4.5 0 0 0 .5-8.97A6 6 0 0 0 6.2 9.5 4 4 0 0 0 6.5 19z"/></svg></button>';
+}
+function renderAccount(){
+  var n=live().length,acct=state.account,step=state.authStep,err=state.authError;
+  var h='<div class="top"><div><h1>Settings</h1><div class="sub">Sync, backup &amp; reset</div></div>'+themeButton()+'</div>';
+  h+='<div class="acct-grid">';
+  h+='<div style="display:flex;flex-direction:column;gap:18px">';
+  var syncLabel=acct?'Synced to your account ('+esc(acct.email)+')':'Saved on this device + cloud';
+  var syncSub=acct?(n+' entr'+(n===1?'y':'ies')+' synced across your devices.'):(n+' entr'+(n===1?'y':'ies')+' saved here and backed up to cloud.');
+  h+='<section class="card" style="flex-direction:row;align-items:flex-start;gap:12px"><span class="av" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2"/><path d="M11 18h2"/></svg></span>'+
+     '<span style="display:flex;flex-direction:column;gap:4px"><b style="font-size:15px">'+esc(syncLabel)+'</b><span class="sub" style="font-weight:500;line-height:1.45">'+syncSub+'</span></span></section>';
   h+=backupCard();
+  // reset section
+  if(state.pendingReset){
+    h+='<section class="card" style="gap:14px"><div class="confirm" role="alert" style="margin:0">'+
+       '<b>Delete everything on this device?</b>'+
+       '<span class="small">All '+n+' entr'+(n===1?'y':'ies')+', budgets and settings will be wiped. This cannot be undone.</span>'+
+       '<div class="btns"><button class="secondary" data-action="reset-cancel">Cancel</button><button class="danger" data-action="reset-confirm">Yes, delete everything</button></div>'+
+       '</div></section>';
+  } else {
+    h+='<section class="card" style="gap:12px"><div class="row-head"><h2 style="font-size:17px">Reset</h2></div>'+
+       '<p class="sub" style="margin:0;font-weight:500;line-height:1.45">Wipe all entries, budgets and settings and start fresh. Save a backup first if you want to keep your data.</p>'+
+       '<button class="secondary" style="color:var(--danger);border-color:var(--danger)" data-action="reset-start">Reset to blank state</button></section>';
+  }
+  h+='</div>';
+  if(acct){
+    h+='<section class="card" style="gap:14px">'+
+       '<div class="row-head"><h2 style="font-size:20px">Sync across your devices</h2></div>'+
+       '<p class="sub" style="margin:0;font-weight:500;line-height:1.45">Signed in as <b>'+esc(acct.email)+'</b>. Your budget syncs automatically across every device that signs in with this email.</p>'+
+       '<button class="secondary" data-action="auth-sign-out">Sign out on this device</button></section>';
+  } else if(step==="code-sent"||step==="verifying"){
+    h+='<section class="card" style="gap:14px">'+
+       '<div class="row-head"><h2 style="font-size:20px">Check your email</h2></div>'+
+       '<p class="sub" style="margin:0;font-weight:500;line-height:1.45">We sent a 6-digit code to <b>'+esc((document.getElementById("acct-email")||{}).value||"your email")+'</b>. Enter it below.</p>'+
+       (err?'<p style="color:var(--danger);font-size:14px;margin:0">'+esc(err)+'</p>':'')+
+       '<label class="sub" for="acct-code" style="display:flex;flex-direction:column;gap:6px">Code<input id="acct-code" class="field-in" type="text" inputmode="numeric" pattern="[0-9]*" maxlength="6" placeholder="123456" autocomplete="one-time-code"'+(step==="verifying"?' disabled':'')+' autofocus></label>'+
+       '<button class="primary" data-action="auth-verify"'+(step==="verifying"?' disabled':'')+'>'+( step==="verifying"?'Verifying…':'Confirm code')+'</button>'+
+       '<button class="link" data-action="auth-reset" style="font-size:14px">Use a different email</button></section>';
+  } else {
+    h+='<section class="card" style="gap:14px">'+
+       '<div class="row-head"><h2 style="font-size:20px">Sync across your devices</h2></div>'+
+       '<p class="sub" style="margin:0;font-weight:500;line-height:1.5">Sign in and your budget syncs across every device automatically.</p>'+
+       (err?'<p style="color:var(--danger);font-size:14px;margin:0">'+esc(err)+'</p>':'')+
+       (_googleClientId?'<div id="google-btn" style="min-height:44px"></div><div style="display:flex;align-items:center;gap:10px;margin:2px 0"><hr style="flex:1;border:none;border-top:1px solid var(--line)"><span class="small muted">or</span><hr style="flex:1;border:none;border-top:1px solid var(--line)"></div>':'')+
+       '<label class="sub" for="acct-email" style="display:flex;flex-direction:column;gap:6px">Email<input id="acct-email" class="field-in" type="email" placeholder="you@example.com"'+(step==="sending"?' disabled':'')+'></label>'+
+       '<button class="primary" data-action="auth-send"'+(step==="sending"?' disabled':'')+'>'+( step==="sending"?'Sending…':'Email me a sign-in code')+'</button>'+
+       '<p class="small muted" style="margin:0;line-height:1.5">When you sign in on a device that already has entries, the device with more entries wins.</p></section>';
+  }
+  h+='</div>';
   return h;
 }
 
@@ -490,8 +603,12 @@ function render(){
   var app=document.getElementById("app");
   if(!state.ready){return;}
   state.runBal=runningBalances();
-  app.innerHTML=state.view==="home"?renderHome():state.view==="activity"?renderActivity():renderBudget();
-  document.querySelectorAll("nav.tabs .t").forEach(function(b){if(b.dataset.tab===state.view)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  state.wide=wideMQ.matches;
+  app.innerHTML=state.view==="home"?'<div class="home-grid">'+renderHome()+'</div>':state.view==="activity"?renderActivity():state.view==="account"?renderAccount():'<div class="budget-grid">'+renderBudget()+'</div>';
+  if(state.view==="account")setTimeout(mountGoogleButton,0);
+  document.querySelectorAll("nav.tabs .t,.side .nav button,.side .acct").forEach(function(b){if(b.dataset.tab===state.view)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
+  var pc=live().filter(function(e){return !e.cleared&&e.date<=today();}).length,sc=document.getElementById("side-count");
+  if(sc){sc.hidden=!pc;sc.textContent=pc;}
   var af=document.getElementById("anchor-form");
   if(af)af.addEventListener("submit",function(ev){ev.preventDefault();var v=toCents(document.getElementById("anchor-in").value);
     if(isNaN(v)){toast("Enter your balance, like 2480.15");return;}
@@ -605,7 +722,8 @@ function deleteSheet(){var s=state.sheet;closeSheet();if(s)deleteEntry(s.id);}
 
 /* ---------- swipe left to delete ---------- */
 var sw=null,openSlide=null,suppressClick=false,closeOnTap=false;
-function closeOpen(except){if(openSlide&&openSlide!==except){openSlide.style.transform="";openSlide=null;}}
+function hideDel(el){setTimeout(function(){if(el.style.transform==="")el.parentNode.classList.remove("reveal");},220);}
+function closeOpen(except){if(openSlide&&openSlide!==except){openSlide.style.transform="";hideDel(openSlide);openSlide=null;}}
 document.addEventListener("pointerdown",function(ev){
   var sl=ev.target.closest(".slide");
   if(!sl){if(!ev.target.closest(".del"))closeOpen(null);return;}
@@ -620,13 +738,13 @@ document.addEventListener("pointermove",function(ev){
     if(Math.abs(dx)>10&&Math.abs(dx)>Math.abs(dy)*1.3){sw.active=true;sw.el.classList.add("drag");try{sw.el.setPointerCapture(ev.pointerId);}catch(e){}}
     else{if(Math.abs(dy)>10)sw=null;return;}
   }
-  sw.pos=Math.max(-140,Math.min(0,sw.base+dx));sw.el.style.transform="translateX("+sw.pos+"px)";
+  sw.pos=Math.max(-140,Math.min(0,sw.base+dx));sw.el.parentNode.classList.add("reveal");sw.el.style.transform="translateX("+sw.pos+"px)";
 });
 function endSwipe(){
   if(!sw)return;var s=sw;sw=null;if(!s.active)return;
   s.el.classList.remove("drag");suppressClick=true;setTimeout(function(){suppressClick=false;},350);
   if(s.pos<-44){s.el.style.transform="translateX(-88px)";openSlide=s.el;}
-  else{s.el.style.transform="";if(openSlide===s.el)openSlide=null;}
+  else{s.el.style.transform="";hideDel(s.el);if(openSlide===s.el)openSlide=null;}
 }
 document.addEventListener("pointerup",endSwipe);
 document.addEventListener("pointercancel",endSwipe);
@@ -684,9 +802,113 @@ document.addEventListener("click",function(ev){
 document.addEventListener("keydown",function(ev){if(ev.key==="Escape"&&state.sheet)closeSheet();});
 document.addEventListener("visibilitychange",function(){if(!document.hidden){now=new Date();render();ensureSeries();}});
 
+/* ---------- cloud sync (Neon Postgres) ----------
+   Fire-and-forget writes; errors silently swallowed so offline use is unaffected.
+   When signed in, syncs to the shared account record; otherwise per-device backup. */
+function getDeviceId(){
+  var KEY="st-device-id",id;
+  try{id=localStorage.getItem(KEY);}catch(e){}
+  if(!id){id=Date.now().toString(36)+Math.random().toString(36).slice(2)+Math.random().toString(36).slice(2);try{localStorage.setItem(KEY,id);}catch(e){}}
+  return id;
+}
+function loadAccount(){
+  try{var s=localStorage.getItem("st-account");return s?JSON.parse(s):null;}catch(e){return null;}
+}
+function saveAccount(acct){
+  try{if(acct)localStorage.setItem("st-account",JSON.stringify(acct));else localStorage.removeItem("st-account");}catch(e){}
+  state.account=acct;
+}
+function authHeaders(){
+  return state.account?{"Content-Type":"application/json","Authorization":"Bearer "+state.account.token}:{"Content-Type":"application/json"};
+}
+function syncToCloud(data){
+  var body=JSON.stringify({entries:data.entries||{},settings:data.settings||null});
+  if(state.account){
+    fetch("/api/account-sync",{method:"POST",headers:authHeaders(),body:body}).catch(function(){});
+  } else {
+    var id=getDeviceId();
+    fetch("/api/sync?device_id="+encodeURIComponent(id),{method:"POST",headers:{"Content-Type":"application/json"},body:body}).catch(function(){});
+  }
+}
+function loadFromCloud(db){
+  var acct=state.account;
+  var url=acct?"/api/account-sync":"/api/sync?device_id="+encodeURIComponent(getDeviceId());
+  var hdrs=acct?authHeaders():{};
+  fetch(url,{headers:hdrs}).then(function(r){return r.ok?r.json():null;}).then(function(remote){
+    if(!remote||!remote.exists)return;
+    var local=db.exportAll();
+    var localKeys=Object.keys(local.entries||{}).length,remoteKeys=Object.keys(remote.entries||{}).length;
+    if(remoteKeys>localKeys)db.importAll({entries:remote.entries||{},settings:remote.settings||null});
+  }).catch(function(){});
+}
+/* ---------- auth actions ---------- */
+function authSendCode(){
+  var email=(document.getElementById("acct-email")||{}).value||"";
+  if(!email||!email.includes("@")){state.authError="Enter a valid email address.";render();return;}
+  state.authStep="sending";state.authError=null;render();
+  fetch("/api/auth/send-code",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email})})
+    .then(function(r){return r.json();})
+    .then(function(j){
+      if(j.ok){state.authStep="code-sent";state.authError=null;}
+      else{state.authStep="idle";state.authError=j.error||"Couldn't send code.";}
+      render();
+    }).catch(function(){state.authStep="idle";state.authError="Network error — try again.";render();});
+}
+function authVerifyCode(){
+  var email=(document.getElementById("acct-email")||{}).value||"";
+  var code=(document.getElementById("acct-code")||{}).value||"";
+  if(!code){state.authError="Enter the 6-digit code from your email.";render();return;}
+  state.authStep="verifying";state.authError=null;render();
+  fetch("/api/auth/verify-code",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email:email,code:code})})
+    .then(function(r){return r.json();})
+    .then(function(j){
+      if(j.ok){
+        saveAccount({email:j.email,token:j.token});
+        state.authStep="idle";state.authError=null;
+        // pull account data and merge with local
+        loadFromCloud(state.db);
+        render();toast("Signed in as "+j.email);
+      } else {
+        state.authStep="code-sent";state.authError=j.error||"Incorrect code.";render();
+      }
+    }).catch(function(){state.authStep="code-sent";state.authError="Network error — try again.";render();});
+}
+function authSignOut(){
+  if(state.account){
+    fetch("/api/auth/sign-out",{method:"POST",headers:authHeaders()}).catch(function(){});
+  }
+  saveAccount(null);state.authStep="idle";state.authError=null;render();toast("Signed out");
+}
+/* ---------- Google Sign-In ---------- */
+var _googleClientId=null;
+function handleGoogleCredential(response){
+  fetch("/api/auth/google",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({credential:response.credential})})
+    .then(function(r){return r.json();})
+    .then(function(j){
+      if(j.ok){saveAccount({email:j.email,token:j.token});state.authStep="idle";state.authError=null;loadFromCloud(state.db);render();toast("Signed in as "+j.email);}
+      else{state.authError=j.error||"Google sign-in failed.";render();}
+    }).catch(function(){state.authError="Network error — try again.";render();});
+}
+function mountGoogleButton(){
+  var el=document.getElementById("google-btn");
+  if(!el||!_googleClientId||!window.google||!window.google.accounts)return;
+  google.accounts.id.renderButton(el,{theme:"outline",size:"large",text:"sign_in_with",width:el.offsetWidth||320,logo_alignment:"left"});
+}
+function initGoogleSignIn(clientId){
+  _googleClientId=clientId;
+  var s=document.createElement("script");s.src="https://accounts.google.com/gsi/client";s.async=true;
+  s.onload=function(){google.accounts.id.initialize({client_id:clientId,callback:handleGoogleCredential,auto_select:false,cancel_on_tap_outside:true});mountGoogleButton();};
+  document.head.appendChild(s);
+}
+function resetAllData(){
+  state.db.importAll({entries:{},settings:null}).then(function(){
+    state.pendingReset=false;render();toast("All data cleared");
+  });
+}
+
 /* ---------- on-device storage ----------
    Same shape as the calls the app already makes (collection().doc().set/update/delete, doc().set, onSnapshot),
-   saved in this phone's local storage. Nothing leaves the device. */
+   saved in this phone's local storage. Also synced to cloud in the background. */
 function makeLocalDB(){
   var KEY="st-data-v1",data;
   try{data=JSON.parse(localStorage.getItem(KEY)||"null");}catch(e){data=null;}
@@ -701,7 +923,7 @@ function makeLocalDB(){
   function changed(){
     try{localStorage.setItem(KEY,JSON.stringify(data));}
     catch(e){toast("Couldn't save on this phone. Storage may be full.");return Promise.reject(e);}
-    clearTimeout(timer);timer=setTimeout(emit,0);return Promise.resolve();
+    clearTimeout(timer);timer=setTimeout(emit,0);syncToCloud(data);return Promise.resolve();
   }
   function newId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,10);}
   function entryRef(id){id=id||newId();return {id:id,
@@ -737,11 +959,11 @@ function readImport(file){
   r.readAsText(file);
 }
 function backupCard(){
-  var le=lastExport(),n=state.entries.length,h='<section class="card"><h2>Backup</h2>';
-  h+='<p class="sub" style="margin:0;font-weight:500;line-height:1.45">Your budget is saved only on this phone. Save a backup file now and then (to Files or iCloud Drive) so you can restore it on a new phone. '+
+  var le=lastExport(),n=state.entries.length,h='<section class="card b-backup"><h2>Backup</h2>';
+  h+='<p class="sub" style="margin:0;font-weight:500;line-height:1.45">Your budget is saved only on '+(state.wide?'this computer':'this phone')+'. Save a backup file now and then (to Files or iCloud Drive) so you can restore it on another device. '+
      (le?'Last backup: '+esc(new Date(le).toLocaleDateString("en-US",{month:"short",day:"numeric",year:"numeric"}))+'.':'No backup yet.')+'</p>';
   if(state.pendingImport){var c=state.pendingImport.count;
-    h+='<div class="confirm" role="alert"><b>Replace everything on this phone?</b><span class="small">The backup has '+c+' entr'+(c===1?'y':'ies')+'. The '+n+' entr'+(n===1?'y':'ies')+' on this phone now will be replaced.</span><div class="btns"><button class="secondary" data-action="import-cancel">Cancel</button><button class="danger" data-action="import-confirm">Replace</button></div></div>';}
+    h+='<div class="confirm" role="alert"><b>Replace everything on this device?</b><span class="small">The backup has '+c+' entr'+(c===1?'y':'ies')+'. The '+n+' entr'+(n===1?'y':'ies')+' here now will be replaced.</span><div class="btns"><button class="secondary" data-action="import-cancel">Cancel</button><button class="danger" data-action="import-confirm">Replace</button></div></div>';}
   else h+='<div class="backup-actions"><button class="secondary" data-action="export">Save backup</button><button class="secondary" data-action="import">Restore</button></div>';
   h+='<input type="file" id="import-file" accept="application/json,.json" hidden></section>';
   return h;
@@ -753,12 +975,24 @@ document.addEventListener("click",function(ev){
   else if(a==="import-cancel"){state.pendingImport=null;render();}
   else if(a==="import-confirm"){var p=state.pendingImport;state.pendingImport=null;created={};
     state.db.importAll(p.data).then(function(){toast("Restored "+p.count+" entries");});}
+  else if(a==="auth-send"){authSendCode();}
+  else if(a==="auth-verify"){authVerifyCode();}
+  else if(a==="auth-sign-out"){authSignOut();}
+  else if(a==="auth-reset"){state.authStep="idle";state.authError=null;render();}
+  else if(a==="reset-start"){state.pendingReset=true;render();}
+  else if(a==="reset-cancel"){state.pendingReset=false;render();}
+  else if(a==="reset-confirm"){resetAllData();}
 });
 document.addEventListener("change",function(ev){if(ev.target&&ev.target.id==="import-file"&&ev.target.files&&ev.target.files[0])readImport(ev.target.files[0]);});
 
 /* ---------- boot ---------- */
 function start(){
   state.db=makeLocalDB();
+  state.account=loadAccount();
+  loadFromCloud(state.db);
+  fetch("/api/auth/config").then(function(r){return r.ok?r.json():null;}).then(function(cfg){
+    if(cfg&&cfg.googleClientId)initGoogleSignIn(cfg.googleClientId);
+  }).catch(function(){});
   try{if(navigator.storage&&navigator.storage.persist)navigator.storage.persist();}catch(e){}
   state.db.doc("settings/main").onSnapshot(function(snap){state.settings=snap.exists?Object.assign({},snap.data()):{};state.settingsLoaded=true;if(state.entriesLoaded){state.ready=true;render();}});
   state.db.collection("entries").onSnapshot(function(snap){

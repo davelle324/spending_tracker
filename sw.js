@@ -1,6 +1,6 @@
 /* Spending Tracker service worker: lets the app open with no internet.
    Bump VERSION whenever you deploy a change to icons or the manifest. */
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL = "shell-" + VERSION;
 const FONTS = "fonts-v1";
 const SHELL_FILES = ["/", "/index.html", "/manifest.webmanifest", "/icons/icon-180.png", "/icons/icon-192.png", "/icons/icon-512.png"];
