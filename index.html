@@ -215,6 +215,40 @@ nav.tabs .add{width:56px;height:56px;margin-top:-18px;border:0;border-radius:999
 .field-in{min-height:50px;border-radius:12px;border:1px solid var(--chip-line);background:var(--bg);padding:0 14px;font-size:16px;font-weight:700;color:var(--ink);width:100%;box-sizing:border-box}
 .field-in:disabled,button:disabled{opacity:.55;cursor:not-allowed}
 .home-grid,.budget-grid{display:flex;flex-direction:column;gap:18px}
+/* Trends */
+.trend-card{display:flex;flex-direction:column;gap:14px}
+.trend-wrap{display:flex;flex-wrap:wrap;gap:28px}
+.trend-main{flex:3 1 480px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.trend-cats{flex:2 1 300px;min-width:0;display:flex;flex-direction:column}
+.trend-range{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:2px;background:var(--seg);border-radius:10px;padding:3px}
+.trend-range button{height:32px;padding:0 10px;white-space:nowrap;border:0;border-radius:8px;background:transparent;font-size:12px;font-weight:600;color:var(--seg-off)}
+.trend-range button[aria-pressed="true"]{background:var(--seg-on);color:var(--ink);font-weight:700}
+.trend-head .big{font-size:28px;font-weight:800}
+.trend-head .cmp{font-size:13px;font-weight:700}
+.up-bad{color:var(--p-fg)}.down-good{color:var(--ok-fg)}.flat{color:var(--muted)}
+.chart{position:relative;height:200px}
+.chart .avg{position:absolute;left:0;right:0;border-top:2px dashed var(--ring)}
+.chart .avg-lbl{position:absolute;left:0;font-size:11px;font-weight:700;color:var(--muted);background:var(--card);padding:0 6px 0 0}
+.chart .bars,.chart-labels{display:grid;gap:8px}
+.chart .bars{position:absolute;inset:0;align-items:end}
+.tbar{height:100%;border:0;background:transparent;padding:0;display:flex;flex-direction:column;justify-content:flex-end;cursor:pointer;border-radius:8px}
+.tbar .sp{display:block;background:color-mix(in srgb,var(--accent) 42%,var(--card));border-radius:8px 8px 4px 4px}
+.tbar .sc{display:block;background:color-mix(in srgb,var(--accent) 14%,var(--card));border:1px dashed var(--accent);border-bottom:0;border-radius:8px 8px 0 0;box-sizing:border-box}
+.tbar .sc+.sp{border-radius:0 0 4px 4px}
+.tbar .none{display:block;height:4px;border-radius:2px;background:var(--line)}
+.tbar[aria-pressed="true"] .sp,.tbar.cur .sp{background:var(--accent)}
+.chart-labels span{text-align:center;font-size:11px;font-weight:600;color:var(--muted)}
+.chart-labels span.sel{color:var(--ink);font-weight:800}
+.legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);font-weight:600}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.tcat{display:grid;grid-template-columns:minmax(0,1fr) auto 64px;gap:12px;align-items:center;min-height:56px;border-top:1px solid var(--line)}
+.tcat b{display:block;font-size:15px}
+.tcat .avgtxt{font-size:12px;color:var(--muted)}
+.spark{display:flex;align-items:flex-end;gap:3px;height:26px}
+.spark i{display:block;width:6px;border-radius:2px;background:var(--chip-line)}
+.spark i.on{background:var(--accent)}
+.tcat .chg{text-align:right;font-size:13px;font-weight:800}
+.tcat .val{font-size:12px;color:var(--muted);font-weight:600}
 @media (min-width: 960px){
   nav.tabs{display:none}
   .side{display:flex;position:fixed;top:0;bottom:0;left:0;width:232px;box-sizing:border-box;flex-direction:column;gap:22px;
@@ -252,6 +286,7 @@ nav.tabs .add{width:56px;height:56px;margin-top:-18px;border:0;border-radius:999
     <button data-tab="home"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5L12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Home</button>
     <button data-tab="activity"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Activity<span class="count" id="side-count" hidden></span></button>
     <button data-tab="budget"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Budget</button>
+    <button data-tab="trends"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Trends</button>
   </div>
   <button class="add-btn" data-action="new" title="Add entry (N)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Add entry</button>
   <div style="flex-grow:1"></div>
@@ -264,6 +299,7 @@ nav.tabs .add{width:56px;height:56px;margin-top:-18px;border:0;border-radius:999
     <button class="t" data-tab="activity"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"/></svg>Activity</button>
     <button class="add" data-action="new" aria-label="Add entry"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></button>
     <button class="t" data-tab="budget"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12a9 9 0 1 1-9-9v9z"/><path d="M15 3.5A9 9 0 0 1 20.5 9H15z"/></svg>Budget</button>
+    <button class="t" data-tab="trends"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>Trends</button>
   </div>
 </nav>
 
@@ -600,12 +636,94 @@ function renderAccount(){
   return h;
 }
 
+/* ---------- trends ---------- */
+var TREND_ICON_UP="▲ ",TREND_ICON_DOWN="▼ ";
+function monthKey(y,m){return y+"-"+pad(m+1);}
+function trendData(range){
+  var t=today(),nowD=parse(t),cy=nowD.getFullYear(),cm=nowD.getMonth();
+  var months=[];
+  for(var k=range-1;k>=0;k--){var d=new Date(cy,cm-k,1);months.push({y:d.getFullYear(),m:d.getMonth()});}
+  var all=live().filter(function(e){return !e.adjust;});
+  months.forEach(function(mo){
+    var key=monthKey(mo.y,mo.m),start=key+"-01",end=key+"-"+pad(dim(mo.y,mo.m));
+    mo.key=key;mo.current=(mo.y===cy&&mo.m===cm);
+    var inMonth=all.filter(function(e){return e.date>=start&&e.date<=end;});
+    mo.has=inMonth.length>0;
+    mo.spent=0;mo.sched=0;mo.byCat={};
+    inMonth.forEach(function(e){if(e.type==="income")return;if(mo.current&&e.date>t)return;
+      mo.spent+=e.amount;var c=e.category||"Other";mo.byCat[c]=(mo.byCat[c]||0)+e.amount;});
+    if(mo.current){monthItems(mo.y,mo.m).forEach(function(e){if(e.type!=="income"&&!e.adjust&&e.date>t)mo.sched+=e.amount;});
+      if(mo.sched>0)mo.has=true;}
+  });
+  /* the chart starts at the first month that has entries */
+  while(months.length&&!months[0].has)months.shift();
+  var full=months.filter(function(mo){return !mo.current&&mo.has;});
+  var avg=full.length?full.reduce(function(a,mo){return a+mo.spent;},0)/full.length:0;
+  return {months:months,full:full,avg:avg};
+}
+function pctChange(v,avg){return avg>0?Math.round((v-avg)/avg*100):0;}
+function changeHtml(ch,avgZero){
+  if(avgZero)return '<span class="flat">New</span>';
+  if(ch===0)return '<span class="flat">Same</span>';
+  var cls=ch>=10?"up-bad":ch<=-5?"down-good":"flat";
+  return '<span class="'+cls+'">'+(ch>0?TREND_ICON_UP:TREND_ICON_DOWN)+Math.abs(ch)+'%</span>';
+}
+function renderTrends(){
+  var range=state.trendRange||(state.wide?12:6),td=trendData(range),months=td.months,full=td.full,avg=td.avg;
+  var h='<div class="top"><div><h1>Trends</h1><div class="sub">Averages use only months that have entries</div></div>'+themeButton()+'</div>';
+  if(!months.length){
+    h+='<div class="empty"><b>No entries yet</b><p>Add expenses and you\'ll see your spending by month and category here.</p></div>';
+    return h;
+  }
+  /* first month: nothing to average yet, so show this month so far */
+  var firstMonth=!full.length;
+  var sel=null;
+  if(state.trendSel)sel=months.filter(function(mo){return mo.key===state.trendSel&&mo.has;})[0]||null;
+  if(!sel)sel=firstMonth?months[months.length-1]:full[full.length-1];
+  var lastFull=full[full.length-1]||null,selName=MONTHS[sel.m]+(sel.y!==parse(today()).getFullYear()?" "+sel.y:"");
+  var selTotal=sel.spent+(sel.current?sel.sched:0);
+  var head='<div class="trend-head" style="display:flex;flex-direction:column;gap:2px"><span class="sub">'+esc(selName)+(sel===lastFull?' · last full month':sel.current?(sel.sched?' · so far, plus still scheduled':' · so far'):'')+'</span>'+
+    '<span class="big">'+fmt(sel.current?sel.spent:sel.spent)+'</span>';
+  if(sel.current){if(sel.sched)head+='<span class="cmp flat">'+fmt(sel.sched)+' still scheduled · '+fmt(selTotal)+' expected</span>';}
+  else{var ch=pctChange(sel.spent,avg);
+    head+='<span class="cmp '+(ch>=10?'up-bad':ch<=-5?'down-good':'flat')+'">'+(ch===0?'Right at':Math.abs(ch)+'% '+(ch>0?'above':'below'))+' your '+full.length+'-month average of '+fmt(Math.round(avg/100)*100)+'</span>';}
+  if(firstMonth)head+='<span class="small muted" style="margin-top:4px;line-height:1.45">This is your first month, so there\'s no average yet. Comparisons start once '+MONTHS[months[months.length-1].m]+' ends.</span>';
+  head+='</div>';
+  /* chart scale */
+  var maxV=Math.max(avg,1);months.forEach(function(mo){maxV=Math.max(maxV,mo.spent+mo.sched);});
+  maxV=maxV*1.08;var H=200,px=function(v){return Math.round(v/maxV*H);};
+  var cols=months.length<4?'grid-template-columns:repeat('+months.length+',72px);justify-content:start':'grid-template-columns:repeat('+months.length+',minmax(0,1fr))';
+  var chart='<div class="chart" role="img" aria-label="'+esc('Spending per month. '+months.map(function(mo){return MONTHS[mo.m]+': '+(mo.has?fmt(mo.spent)+(mo.current&&mo.sched?' so far plus '+fmt(mo.sched)+' scheduled':''):'no entries');}).join('. ')+'. Average '+fmt(Math.round(avg/100)*100)+'.')+'">'+
+    (avg>0?'<div class="avg" style="bottom:'+px(avg)+'px"></div><span class="avg-lbl" style="bottom:'+(px(avg)+4)+'px">Avg '+fmt(Math.round(avg/100)*100)+'</span>':'')+
+    '<div class="bars" style="'+cols+';padding-left:'+(state.wide?76:0)+'px">'+months.map(function(mo){
+      var inner=!mo.has?'<span class="none"></span>':(mo.sched?'<span class="sc" style="height:'+px(mo.sched)+'px"></span>':'')+'<span class="sp" style="height:'+Math.max(2,px(mo.spent))+'px"></span>';
+      return '<button class="tbar'+(mo.current?' cur':'')+'" data-action="trend-sel" data-v="'+mo.key+'" aria-pressed="'+(mo===sel)+'" aria-label="'+esc(MONTHS[mo.m]+' '+mo.y+(mo.has?': '+fmt(mo.spent):': no entries'))+'"'+(mo.has?'':' disabled')+'>'+inner+'</button>';}).join('')+'</div></div>'+
+    '<div class="chart-labels" style="'+cols+';padding-left:'+(state.wide?76:0)+'px">'+months.map(function(mo){return '<span class="'+(mo===sel?'sel':'')+'">'+MONTHS[mo.m].slice(0,3)+'</span>';}).join('')+'</div>'+
+    '<div class="legend"><span><i style="background:var(--accent)"></i>Spent</span>'+(months.some(function(mo){return mo.sched;})?'<span><i style="background:color-mix(in srgb,var(--accent) 14%,var(--card));border:1px dashed var(--accent);box-sizing:border-box"></i>Still scheduled</span>':'')+'<span>'+(state.wide?'Click':'Tap')+' a month to see it</span></div>';
+  /* categories: selected month vs average over full months with entries */
+  var names={};full.forEach(function(mo){Object.keys(mo.byCat).forEach(function(c){names[c]=1;});});Object.keys(sel.byCat).forEach(function(c){names[c]=1;});
+  var rows=Object.keys(names).map(function(c){
+    var a=full.length?full.reduce(function(x,mo){return x+(mo.byCat[c]||0);},0)/full.length:0,v=sel.byCat[c]||0;
+    var mx=Math.max.apply(null,months.map(function(mo){return mo.byCat[c]||0;}).concat([1]));
+    return {c:c,avg:a,v:v,spark:months.map(function(mo){return {h:Math.max(2,Math.round((mo.byCat[c]||0)/mx*26)),on:mo===sel};})};
+  }).sort(function(a,b){return (b.avg-a.avg)||(b.v-a.v);});
+  var catsHtml='<div style="padding-bottom:6px"><h2 style="font-size:16px">By category</h2><span class="small muted">'+esc(selName)+(sel.current?' so far':'')+(firstMonth?'':' compared with your average')+'</span></div>'+
+    rows.map(function(r){return '<div class="tcat"><span><b>'+esc(r.c)+'</b><span class="avgtxt">'+fmt(r.v)+(firstMonth?' so far':' · avg '+fmt(Math.round(r.avg/100)*100)+' / month')+'</span></span>'+
+      '<span class="spark" aria-hidden="true">'+r.spark.map(function(s){return '<i class="'+(s.on?'on':'')+'" style="height:'+s.h+'px"></i>';}).join('')+'</span>'+
+      '<span class="chg">'+(sel.current?'<span class="flat">—</span>':changeHtml(pctChange(r.v,r.avg),r.avg===0))+'</span></div>';}).join('');
+  var rangeHtml='<div class="trend-range" role="group" aria-label="Time range"><button data-action="trend-range" data-v="6" aria-pressed="'+(range===6)+'">6 months</button><button data-action="trend-range" data-v="12" aria-pressed="'+(range===12)+'">12 months</button></div>';
+  h+='<section class="card trend-card"><div class="trend-wrap"><div class="trend-main"><div class="row-head" style="align-items:flex-start"><h2 style="font-size:17px">Monthly spending</h2>'+rangeHtml+'</div>'+head+chart+'</div>'+
+     (state.wide?'<div class="trend-cats">'+catsHtml+'</div>':'')+'</div></section>';
+  if(!state.wide)h+='<section class="card" style="padding:6px 16px 10px;gap:0">'+catsHtml+'</section>';
+  return h;
+}
+
 function render(){
   var app=document.getElementById("app");
   if(!state.ready){return;}
   state.runBal=runningBalances();
   state.wide=wideMQ.matches;
-  app.innerHTML=state.view==="home"?'<div class="home-grid">'+renderHome()+'</div>':state.view==="activity"?renderActivity():state.view==="account"?renderAccount():'<div class="budget-grid">'+renderBudget()+'</div>';
+  app.innerHTML=state.view==="home"?'<div class="home-grid">'+renderHome()+'</div>':state.view==="activity"?renderActivity():state.view==="account"?renderAccount():state.view==="trends"?renderTrends():'<div class="budget-grid">'+renderBudget()+'</div>';
   if(state.view==="account")setTimeout(mountGoogleButton,0);
   document.querySelectorAll("nav.tabs .t,.side .nav button,.side .acct").forEach(function(b){if(b.dataset.tab===state.view)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");});
   var pc=live().filter(function(e){return !e.cleared&&e.date<=today();}).length,sc=document.getElementById("side-count");
@@ -778,6 +896,8 @@ document.addEventListener("click",function(ev){
   if(a==="clear"){toggleCleared(id);return;}
   if(a==="swipe-del"){deleteEntry(id);return;}
   if(a==="filter"){state.filter=el.dataset.v;render();return;}
+  if(a==="trend-sel"){state.trendSel=el.dataset.v;render();return;}
+  if(a==="trend-range"){state.trendRange=Number(el.dataset.v);state.trendSel=null;render();return;}
   if(a==="see-upcoming"){state.view="activity";state.filter="all";render();window.scrollTo(0,0);return;}
   if(a==="edit-balance"){state.editBalance=true;render();var i=document.getElementById("anchor-in");if(i)i.focus();return;}
   if(a==="cancel-balance"){state.editBalance=false;state.adjValue=null;state.adjReason=null;render();return;}
