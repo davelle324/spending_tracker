@@ -236,7 +236,7 @@ nav.tabs .add{width:56px;height:56px;margin-top:-18px;border:0;border-radius:999
 .tbar .sc{display:block;background:color-mix(in srgb,var(--accent) 14%,var(--card));border:1px dashed var(--accent);border-bottom:0;border-radius:8px 8px 0 0;box-sizing:border-box}
 .tbar .sc+.sp{border-radius:0 0 4px 4px}
 .tbar .none{display:block;height:4px;border-radius:2px;background:var(--line)}
-.tbar[aria-pressed="true"] .sp,.tbar.cur .sp{background:var(--accent)}
+.tbar[aria-pressed="true"] .sp{background:var(--accent)}
 .chart-labels span{text-align:center;font-size:11px;font-weight:600;color:var(--muted)}
 .chart-labels span.sel{color:var(--ink);font-weight:800}
 .legend{display:flex;flex-wrap:wrap;gap:14px;font-size:12px;color:var(--muted);font-weight:600}
@@ -699,7 +699,7 @@ function renderTrends(){
       var inner=!mo.has?'<span class="none"></span>':(mo.sched?'<span class="sc" style="height:'+px(mo.sched)+'px"></span>':'')+'<span class="sp" style="height:'+Math.max(2,px(mo.spent))+'px"></span>';
       return '<button class="tbar'+(mo.current?' cur':'')+'" data-action="trend-sel" data-v="'+mo.key+'" aria-pressed="'+(mo===sel)+'" aria-label="'+esc(MONTHS[mo.m]+' '+mo.y+(mo.has?': '+fmt(mo.spent):': no entries'))+'"'+(mo.has?'':' disabled')+'>'+inner+'</button>';}).join('')+'</div></div>'+
     '<div class="chart-labels" style="'+cols+';padding-left:'+(state.wide?76:0)+'px">'+months.map(function(mo){return '<span class="'+(mo===sel?'sel':'')+'">'+MONTHS[mo.m].slice(0,3)+'</span>';}).join('')+'</div>'+
-    '<div class="legend"><span><i style="background:var(--accent)"></i>Spent</span>'+(months.some(function(mo){return mo.sched;})?'<span><i style="background:color-mix(in srgb,var(--accent) 14%,var(--card));border:1px dashed var(--accent);box-sizing:border-box"></i>Still scheduled</span>':'')+'<span>'+(state.wide?'Click':'Tap')+' a month to see it</span></div>';
+    '<div class="legend"><span><i style="background:var(--accent)"></i>Spent</span>'+(months.some(function(mo){return mo.sched;})?'<span><i style="background:color-mix(in srgb,var(--accent) 14%,var(--card));border:1px dashed var(--accent);box-sizing:border-box"></i>Still scheduled</span>':'')+(months.filter(function(mo){return mo.has;}).length>1?'<span>'+(state.wide?'Click':'Tap')+' a month to see its total and categories</span>':'')+'</div>';
   /* categories: selected month vs average over full months with entries */
   var names={};full.forEach(function(mo){Object.keys(mo.byCat).forEach(function(c){names[c]=1;});});Object.keys(sel.byCat).forEach(function(c){names[c]=1;});
   var rows=Object.keys(names).map(function(c){
